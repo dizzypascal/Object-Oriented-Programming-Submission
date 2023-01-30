@@ -7,7 +7,7 @@ public class SpawnManager : MonoBehaviour
     [SerializeField] GameObject[] enemyPrefabs;
     private float spawnRange = 9;
     private int enemyCount;
-    private int waveNumber = 0;
+    public int waveNumber = 0;
     [SerializeField] GameObject powerupPrefab;
     [SerializeField] GameObject firepowerPrefab;
     [SerializeField] GameObject smashpowerPrefab;
@@ -15,7 +15,7 @@ public class SpawnManager : MonoBehaviour
     private int enemyIndex;
     private int powerupIndex;
 
-    private bool bossWave;
+    public bool bossWave;
     private int bossWaveCounter = 0;
     [SerializeField] GameObject bossEnemy;
 
@@ -40,11 +40,7 @@ public class SpawnManager : MonoBehaviour
     }
 
 
-    IEnumerator BossSpawn()
-    {
-        yield return new WaitForSeconds(1);
-        bossWave = false;    
-    }
+
 
     void BossWave()
     {
@@ -53,8 +49,6 @@ public class SpawnManager : MonoBehaviour
         if (enemyCount == 0 && bossWave)
         {
             Instantiate(bossEnemy, GenerateSpawnPosition(), bossEnemy.transform.rotation);
-            SpawnEnemyWave(waveNumber);
-            StartCoroutine(BossSpawn());
         }
     }
 
@@ -75,7 +69,7 @@ public class SpawnManager : MonoBehaviour
         }
     }
 
-    void SpawnEnemyWave(int enemiesToSpawn)
+    public void SpawnEnemyWave(int enemiesToSpawn)
     {
         for (int i = 0; i < enemiesToSpawn; i++)
         {

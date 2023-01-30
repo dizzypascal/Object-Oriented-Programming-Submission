@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    private Rigidbody enemyRb;
-    private GameObject player;
-    private float speed = 3.0f;
-    private Vector3 lookDirection;
+    protected Rigidbody enemyRb;
+    protected GameObject player;
+    protected float speed = 3.0f;
+    protected Vector3 lookDirection;
 
-    private PlayerController playerControllerScript;
+    protected PlayerController playerControllerScript;
 
     // Start is called before the first frame update
-    void Start()
+    protected virtual void Start()
     {
         enemyRb = GetComponent<Rigidbody>();
         player = GameObject.Find("Player");
@@ -21,7 +21,7 @@ public class Enemy : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    protected virtual void Update()
     {
 
         CheckForPlayer();
@@ -30,13 +30,12 @@ public class Enemy : MonoBehaviour
         Smashed();
     }
 
-    private void Target()
+    protected virtual void Target()
     {
-
         enemyRb.AddForce(lookDirection.normalized * speed);
     }
 
-    private void EnemyCleanUp()
+    protected virtual void EnemyCleanUp()
     {
         if (transform.position.y < -10)
         {
@@ -44,15 +43,15 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    private void Smashed()
+    protected virtual void Smashed()
     {
         if (playerControllerScript.aboutToSmash && player.transform.position.y < 0.3)
         {
-            enemyRb.AddForce(-lookDirection * 150);
+            enemyRb.AddForce(-lookDirection * 150) ;
         }
     }
 
-    private void CheckForPlayer()
+    protected void CheckForPlayer()
     {
         if (player != null)
         {

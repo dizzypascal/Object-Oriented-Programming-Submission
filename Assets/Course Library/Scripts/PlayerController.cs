@@ -143,7 +143,6 @@ public class PlayerController : MonoBehaviour
 
             enemyRb.AddForce(awayFromPlayer * powerUpStrength, ForceMode.Impulse);
 
-            Debug.Log("Colided with: " + collision.gameObject.name + " with powerup set to " + hasPowerup);
         }
 
         if (collision.gameObject.CompareTag("Floor") && aboutToSmash)
