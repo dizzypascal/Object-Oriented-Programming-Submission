@@ -7,6 +7,7 @@ public class PlayerController : MonoBehaviour
     public float speed = 10f;
     private Rigidbody playerRb;
     private GameObject focalPoint;
+    public GameObject gameOverScreen;
     public bool hasPowerup;
     public bool hasFirepower;
     public bool hasSmashpower;
@@ -22,12 +23,12 @@ public class PlayerController : MonoBehaviour
     private float elapsedTime;
     public bool aboutToSmash;
 
+    public bool gameOver;
     // Start is called before the first frame update
     void Start()
     {
         playerRb = GetComponent<Rigidbody>();
         focalPoint = GameObject.Find("Focal Point");
-
 
     }
 
@@ -51,7 +52,7 @@ public class PlayerController : MonoBehaviour
         }
 
         SmashAttack();
-
+        GameOver();
     }
 
     public void SmashAttack()
@@ -137,6 +138,17 @@ public class PlayerController : MonoBehaviour
         if (collision.gameObject.CompareTag("Floor") && aboutToSmash)
         {
             aboutToSmash = false;
+        }
+    }
+
+    private void GameOver()
+    {
+        if (transform.position.y < -10f)
+        {
+            gameOverScreen.SetActive(true);
+            gameOver = true; 
+            Destroy(gameObject);
+
         }
     }
 }
