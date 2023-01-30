@@ -4,10 +4,15 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    //player physics
     [SerializeField] float speed = 10f;
     private Rigidbody playerRb;
+    
     private GameObject focalPoint;
+    
     [SerializeField] GameObject gameOverScreen;
+    
+    //powerup variables
     static bool hasPowerup;
     static bool hasFirepower;
     static bool hasSmashpower;
@@ -16,6 +21,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] GameObject bullets;
     private bool bulletsDelay;
 
+    //smash variables
     private Vector3 startPos;
     private Vector3 endPos;
     private float jumpUpTime = 1f;
