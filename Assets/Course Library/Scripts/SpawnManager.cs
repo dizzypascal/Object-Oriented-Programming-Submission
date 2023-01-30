@@ -4,34 +4,49 @@ using UnityEngine;
 
 public class SpawnManager : MonoBehaviour
 {
-    public GameObject[] enemyPrefabs;
+    [SerializeField] GameObject[] enemyPrefabs;
     private float spawnRange = 9;
-    public int enemyCount;
-    public int waveNumber = 0;
-    public GameObject powerupPrefab;
-    public GameObject firepowerPrefab;
-    public GameObject smashpowerPrefab;
-    public GameObject[] powerups;
+    private int enemyCount;
+    private int waveNumber = 0;
+    [SerializeField] GameObject powerupPrefab;
+    [SerializeField] GameObject firepowerPrefab;
+    [SerializeField] GameObject smashpowerPrefab;
+    [SerializeField] GameObject[] powerups;
     private int enemyIndex;
     private int powerupIndex;
 
-    public bool bossWave;
-    public int bossCount;
-    public int bossWaveCounter = 0;
-    public GameObject bossEnemy;
+    private bool bossWave;
+    private int bossWaveCounter = 0;
+    [SerializeField] GameObject bossEnemy;
+
+    public bool gameOver;
 
     // Start is called before the first frame update
     void Start()
     {
 
-        //SpawnEnemyWave(waveNumber);
-        //Instantiate(RandomPowerup(), GenerateSpawnPosition(), powerupPrefab.transform.rotation);
-        //Instantiate(firepowerPrefab, GenerateSpawnPosition(), powerupPrefab.transform.rotation);
-        //Instantiate(smashpowerPrefab, GenerateSpawnPosition(), powerupPrefab.transform.rotation);
     }
 
     // Update is called once per frame
     void Update()
+    {
+        if (!gameOver)
+        {
+            BossWave();
+            NormalWave();
+        }
+
+
+    }
+
+
+    IEnumerator BossSpawn()
+    {
+        yield return new WaitForSeconds(1);
+        bossWave = false;    
+    }
+
+    void BossWave()
     {
         enemyCount = FindObjectsOfType<Enemy>().Length;
 
@@ -41,13 +56,16 @@ public class SpawnManager : MonoBehaviour
             SpawnEnemyWave(waveNumber);
             StartCoroutine(BossSpawn());
         }
+    }
 
+    void NormalWave()
+    {
         if (enemyCount == 0 && !bossWave)
         {
             waveNumber++;
             SpawnEnemyWave(waveNumber);
             Instantiate(RandomPowerup(), GenerateSpawnPosition(), powerupPrefab.transform.rotation);
-            bossWaveCounter ++;
+            bossWaveCounter++;
             if (bossWaveCounter == 4)
             {
                 bossWave = true;
@@ -55,18 +73,6 @@ public class SpawnManager : MonoBehaviour
             }
 
         }
-
-
-
-
-    }
-
-
-    IEnumerator BossSpawn()
-    {
-        yield return new WaitForSeconds(1);
-        bossWave = false;
-       
     }
 
     void SpawnEnemyWave(int enemiesToSpawn)

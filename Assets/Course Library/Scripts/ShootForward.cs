@@ -4,17 +4,11 @@ using UnityEngine;
 
 public class ShootForward : MonoBehaviour
 {
-    public float bulletspeed = 10f;
-    public GameObject enemy;
-    public GameObject hardEnemy;
+    private float bulletspeed = 10f;
 
     private Rigidbody objectRb;
 
-    private PlayerController _player;
-
-    public Transform _target;
-
-    private float _angleChangingSpeed;
+    private Transform _target;
 
     private bool startHome;
 

@@ -8,11 +8,11 @@ using UnityEditor;
 
 public class MenuUIHandler : MonoBehaviour
 {
-    private PlayerController playerControllerScript;
+    private SpawnManager spawnManagerScript;
     // Start is called before the first frame update
     void Start()
     {
-        playerControllerScript = GameObject.Find("Player").GetComponent<PlayerController>();
+        spawnManagerScript = GameObject.Find("Spawn Manager").GetComponent<SpawnManager>();
     }
 
     // Update is called once per frame
@@ -25,7 +25,7 @@ public class MenuUIHandler : MonoBehaviour
         if (GameObject.Find("Game Over Screen") != null)
         {
             GameObject.Find("Game Over Screen").SetActive(false);
-            playerControllerScript.gameOver = false;
+            spawnManagerScript.gameOver = false;
         }
         
         //pressing start button will load main scene

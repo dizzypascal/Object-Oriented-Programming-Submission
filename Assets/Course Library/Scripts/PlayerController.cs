@@ -4,16 +4,16 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public float speed = 10f;
+    [SerializeField] float speed = 10f;
     private Rigidbody playerRb;
     private GameObject focalPoint;
-    public GameObject gameOverScreen;
-    public bool hasPowerup;
-    public bool hasFirepower;
-    public bool hasSmashpower;
+    [SerializeField] GameObject gameOverScreen;
+    static bool hasPowerup;
+    static bool hasFirepower;
+    static bool hasSmashpower;
     private float powerUpStrength = 15.0f;
-    public GameObject powerupIndicator;
-    public GameObject bullets;
+    [SerializeField] GameObject powerupIndicator;
+    [SerializeField] GameObject bullets;
     private bool bulletsDelay;
 
     private Vector3 startPos;
@@ -23,24 +23,33 @@ public class PlayerController : MonoBehaviour
     private float elapsedTime;
     public bool aboutToSmash;
 
-    public bool gameOver;
+    private SpawnManager spawnManagerScript;
     // Start is called before the first frame update
     void Start()
     {
         playerRb = GetComponent<Rigidbody>();
         focalPoint = GameObject.Find("Focal Point");
-
+        spawnManagerScript = GameObject.Find("Spawn Manager").GetComponent<SpawnManager>();
     }
 
     // Update is called once per frame
     void Update()
     {
+        Move();
+        PowerUpIndicatorFollow();
+        Shoot();
+        SmashAttack();
+        GameOver();
+    }
+
+    private void Move()
+    {
         float forwardInput = Input.GetAxis("Vertical");
-
         playerRb.AddForce(focalPoint.transform.forward * forwardInput * speed);
-        
-        powerupIndicator.transform.position = transform.position + new Vector3(0, -0.5f, 0);
+    }
 
+    private void Shoot()
+    {
         if (hasFirepower && bulletsDelay == true)
         {
             StartCoroutine(Shootingdelay());
@@ -50,12 +59,14 @@ public class PlayerController : MonoBehaviour
             Instantiate(bullets, transform.position + new Vector3(0, 0, 1), Quaternion.Euler(new Vector3(0, 315, 0)));
             bulletsDelay = false;
         }
-
-        SmashAttack();
-        GameOver();
     }
 
-    public void SmashAttack()
+    private void PowerUpIndicatorFollow()
+    {
+        powerupIndicator.transform.position = transform.position + new Vector3(0, -0.5f, 0);
+    }
+
+    private void SmashAttack()
     {
         if (hasSmashpower && Input.GetKeyDown(KeyCode.Space) && !aboutToSmash)
 
@@ -146,7 +157,17 @@ public class PlayerController : MonoBehaviour
         if (transform.position.y < -10f)
         {
             gameOverScreen.SetActive(true);
-            gameOver = true; 
+            spawnManagerScript.gameOver = true;
+
+            GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+            if (enemies.Length > 0)
+            {
+                for (int e = 0; e < enemies.Length; e++)
+                {
+                    Destroy(enemies[e]);
+                }
+            }
+
             Destroy(gameObject);
 
         }

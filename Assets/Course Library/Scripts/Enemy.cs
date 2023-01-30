@@ -6,7 +6,8 @@ public class Enemy : MonoBehaviour
 {
     private Rigidbody enemyRb;
     private GameObject player;
-    public float speed = 3.0f;
+    private float speed = 3.0f;
+    private Vector3 lookDirection;
 
     private PlayerController playerControllerScript;
 
@@ -22,18 +23,40 @@ public class Enemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Vector3 lookDirection = player.transform.position - transform.position; 
+
+        CheckForPlayer();
+        Target();
+        EnemyCleanUp();
+        Smashed();
+    }
+
+    private void Target()
+    {
 
         enemyRb.AddForce(lookDirection.normalized * speed);
+    }
 
+    private void EnemyCleanUp()
+    {
         if (transform.position.y < -10)
         {
             Destroy(gameObject);
         }
+    }
 
+    private void Smashed()
+    {
         if (playerControllerScript.aboutToSmash && player.transform.position.y < 0.3)
         {
             enemyRb.AddForce(-lookDirection * 150);
+        }
+    }
+
+    private void CheckForPlayer()
+    {
+        if (player != null)
+        {
+            lookDirection = player.transform.position - transform.position;
         }
     }
 }
